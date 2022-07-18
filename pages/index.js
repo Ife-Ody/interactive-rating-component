@@ -8,33 +8,22 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import StarRating from "../components/starRating";
 
 export default function Home() {
-  const [starRating, setstarRating] = useState();
+  const [Rating, setRating] = useState(0);
   const stars = [1, 2, 3, 4, 5];
-  const listItems = stars.map((star) => (
-    <Circle as="button"
-      size="51px"
-      bg="darkBlue"
-      color={"mediumGray"}
-      _hover={{
-        background: "orange",
-        color: "white",
-      }}
-      _focus={{
-        background: "mediumGray",
-        color: "white",
-      }}
-      transition="0.5s"
-      key={star}
-    >
-      {star}
-    
-    </Circle>
-  ));
+  const router = useRouter()
+
+  function submitHandler(e) {
+    e.preventDefault();
+    console.log(Rating);
+    router.push(`./thank-you?rating=${Rating}`)
+  }
   return (
-    <Center bg="veryDarkBlue" w="100%" p={4} color="white" h="calc(100vh)" >
+    <Center bg="veryDarkBlue" w="100%" p={4} color="white" h="calc(100vh)">
       <Box
         m="auto"
         borderRadius="30px"
@@ -47,7 +36,7 @@ export default function Home() {
           <Image
             boxSize="16px"
             src="./images/icon-star.svg"
-            alt="Dan Abramov"
+            alt="Logo"
           />
         </Circle>
         <Heading as="h1" size="lg" my="2">
@@ -58,7 +47,13 @@ export default function Home() {
           is appreciated to help us improve our offering!
         </Text>
         <Flex justify="space-between" my="6">
-          {listItems}
+          {stars.map((star) => (
+            <StarRating
+              setRating={setRating}
+              star={star}
+              key={star}
+            ></StarRating>
+          ))}
         </Flex>
         <Button
           w={"full"}
@@ -71,12 +66,10 @@ export default function Home() {
             color: "orange",
           }}
           transition="0.5s"
+          onClick={submitHandler}
         >
           Submit
         </Button>
-        {/* You selected out of 5 Thank you! We appreciate you taking the
-        time to give a rating. If you ever need more support, don’t hesitate to
-        get in touch! */}
       </Box>
     </Center>
   );
